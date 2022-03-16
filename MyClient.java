@@ -8,7 +8,7 @@ public class MyClient {
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
-            dout.write(("Hello\n").getBytes());
+            dout.write(("Helo\n").getBytes());
             dout.flush();
             String str = (String) in.readLine();
             System.out.println("message= " + str);
