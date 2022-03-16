@@ -12,7 +12,7 @@ public class MyClient {
             dout.flush();
             String str = (String) in.readLine();
             System.out.println("message= " + str);
-            dout.write(("AUTH\n").getBytes());
+            dout.write(("AUTH brajesh\n").getBytes());
             dout.flush();
             String str1 = (String) in.readLine();
             System.out.println("message= " + str1);
