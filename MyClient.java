@@ -16,6 +16,7 @@ public class MyClient {
             dout.flush();
             String str1 = (String) in.readLine();
             System.out.println("message= " + str1);
+            dout.write(("REDY\n").getBytes());
             dout.close();
             s.close();
 
