@@ -36,6 +36,7 @@ public class MyClient {
                 String jobinfo[] = str2.split(" ");
                 // dout.write(("GETS Capable " + jobinfo[4] + " " + jobinfo[5] + " " +
                 // jobinfo[6] + "\n").getBytes());
+
                 dout.write(("GETS All\n").getBytes());
                 dout.flush();
                 String str3 = in.readLine();
@@ -60,31 +61,28 @@ public class MyClient {
                         }
                         largest_server_type = split_str4[0];
                         compare_core = core;
-
                         largest_server_id.add(server_id);
                     }
-                }
-                // System.out.println(largest_server_type);
-                // System.out.println(largest_server_id.size());
-
-                dout.write(("OK\n").getBytes());
-                dout.flush();
-                //String str5 = in.readLine();
-                //System.out.println("message= " + str5);
-
-                if (server_index < largest_server_id.size() && jobinfo[0].equals("JOBN")) {
-                    dout.write(("SCHD " + jobinfo[2] + " " + largest_server_type + " "
-                            + largest_server_id.get(server_index) + "\n").getBytes());
-                    String str6 = in.readLine();
+                    // System.out.println(largest_server_type);
+                    // System.out.println(largest_server_id.size());
+                    dout.write(("OK\n").getBytes());
                     dout.flush();
-                    System.out.println("message= " + str6);
-                    server_index++;
+                    String str5 = in.readLine();
+                    System.out.println("message= " + str5);
+                    if (server_index < largest_server_id.size() && jobinfo[0].equals("JOBN")) {
+                        dout.write(("SCHD " + jobinfo[2] + " " + largest_server_type + " "
+                                + largest_server_id.get(server_index) + "\n").getBytes());
+                        String str6 = in.readLine();
+                        dout.flush();
+                        System.out.println("message= " + str6);
+                        server_index++;
+                    }
                 }
             }
             dout.write(("QUIT\n").getBytes());
             dout.flush();
-            String str8 = in.readLine();
-            System.out.println("message= " + str8);
+            String str7 = in.readLine();
+            System.out.println("message= " + str7);
             dout.close();
             s.close();
 
