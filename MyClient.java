@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class MyClient {
     public static void main(String[] args) {
@@ -21,7 +22,9 @@ public class MyClient {
 
             // handshake done
             int compare_core = 0;
-            String larges_server_type = null;
+            String largest_server_type = null;
+            ArrayList<Integer> largest_server_id = new ArrayList<Integer>();
+            int server_index = 0;
 
             dout.write(("REDY\n").getBytes());
             dout.flush();
@@ -40,26 +43,48 @@ public class MyClient {
                 String datainfo[] = str3.split(" ");
                 int nRecs = Integer.parseInt(datainfo[1]);
                 dout.write(("OK\n").getBytes());
+                dout.flush();
                 for (int i = 0; i < nRecs; i++) {
                     String str4 = in.readLine();
                     System.out.println("message= " + str4);
                     String split_str4[] = str4.split(" ");
                     int core = Integer.parseInt(split_str4[4]);
-                    System.out.println("mess= " + compare_core);
-                    System.out.println("mes= " + core);
+                    int server_id = Integer.parseInt(split_str4[1]);
 
-                    if (core > compare_core) {
-                        larges_server_type = split_str4[0];
+                    // System.out.println("mess= " + compare_core);
+                    // System.out.println("mes= " + core);
+
+                    if (core >= compare_core) {
+                        if (core > compare_core) {
+                            largest_server_id.clear();
+                        }
+                        largest_server_type = split_str4[0];
                         compare_core = core;
+
+                        largest_server_id.add(server_id);
                     }
                 }
-                System.out.println(larges_server_type);
-                dout.write(("OK\n").getBytes());
-                // dout.flush();
-                // String str5 = in.readLine();
-                // System.out.println("message= " + str5 );
+                // System.out.println(largest_server_type);
+                // System.out.println(largest_server_id.size());
 
+                dout.write(("OK\n").getBytes());
+                dout.flush();
+                //String str5 = in.readLine();
+                //System.out.println("message= " + str5);
+
+                if (server_index < largest_server_id.size() && jobinfo[0].equals("JOBN")) {
+                    dout.write(("SCHD " + jobinfo[2] + " " + largest_server_type + " "
+                            + largest_server_id.get(server_index) + "\n").getBytes());
+                    String str6 = in.readLine();
+                    dout.flush();
+                    System.out.println("message= " + str6);
+                    server_index++;
+                }
             }
+            dout.write(("QUIT\n").getBytes());
+            dout.flush();
+            String str8 = in.readLine();
+            System.out.println("message= " + str8);
             dout.close();
             s.close();
 
