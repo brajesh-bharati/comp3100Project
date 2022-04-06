@@ -18,7 +18,7 @@ public class MyClient {
             dout.write(("AUTH brajesh\n").getBytes());
             dout.flush();
             String str1 = in.readLine();
-            System.out.println("message= " + str1);
+            System.out.println("message1= " + str1);
 
             // handshake done
             int compare_core = 0;
@@ -28,61 +28,70 @@ public class MyClient {
 
             dout.write(("REDY\n").getBytes());
             dout.flush();
-            String str2 = in.readLine();
-            System.out.println("message= " + str2);
-            String check = str2.substring(0, 4); // To extract the first word from the response for example JOBN as that
+            str1 = in.readLine();
+            System.out.println("message2= " + str1);
+            String check = str1.substring(0, 4); // To extract the first word from the response for example JOBN as that
                                                  // is what we are interested in
             while (!check.equals("NONE")) {
-                String jobinfo[] = str2.split(" ");
+                String jobinfo[] = str1.split(" ");
                 // dout.write(("GETS Capable " + jobinfo[4] + " " + jobinfo[5] + " " +
                 // jobinfo[6] + "\n").getBytes());
 
-                dout.write(("GETS All\n").getBytes());
-                dout.flush();
-                String str3 = in.readLine();
-                System.out.println("message= " + str3);
-                String datainfo[] = str3.split(" ");
-                int nRecs = Integer.parseInt(datainfo[1]);
-                dout.write(("OK\n").getBytes());
-                dout.flush();
-                for (int i = 0; i < nRecs; i++) {
-                    String str4 = in.readLine();
-                    System.out.println("message= " + str4);
-                    String split_str4[] = str4.split(" ");
-                    int core = Integer.parseInt(split_str4[4]);
-                    int server_id = Integer.parseInt(split_str4[1]);
-
-                    // System.out.println("mess= " + compare_core);
-                    // System.out.println("mes= " + core);
-
-                    if (core >= compare_core) {
-                        if (core > compare_core) {
-                            largest_server_id.clear();
-                        }
-                        largest_server_type = split_str4[0];
-                        compare_core = core;
-                        largest_server_id.add(server_id);
-                    }
-                    // System.out.println(largest_server_type);
-                    // System.out.println(largest_server_id.size());
+                if (jobinfo[0].equals("JOBN")) {
+                    dout.write(("GETS All\n").getBytes());
+                    dout.flush();
+                    str1 = in.readLine();
+                    System.out.println("message3= " + str1);
+                    String datainfo[] = str1.split(" ");
+                    int nRecs = Integer.parseInt(datainfo[1]);
                     dout.write(("OK\n").getBytes());
                     dout.flush();
-                    String str5 = in.readLine();
-                    System.out.println("message= " + str5);
-                    if (server_index < largest_server_id.size() && jobinfo[0].equals("JOBN")) {
+                    for (int i = 0; i < nRecs; i++) {
+                        str1 = in.readLine();
+                        System.out.println("message4= " + str1);
+                        String split_str4[] = str1.split(" ");
+                        int core = Integer.parseInt(split_str4[4]);
+                        int server_id = Integer.parseInt(split_str4[1]);
+
+                        // System.out.println("mess= " + compare_core);
+                        // System.out.println("mes= " + core);
+
+                        if (core >= compare_core) {
+                            if (core > compare_core) {
+                                largest_server_id.clear();
+                            }
+                            largest_server_type = split_str4[0];
+                            compare_core = core;
+                            largest_server_id.add(server_id);
+                        }
+                        // System.out.println(largest_server_type);
+                        // System.out.println(largest_server_id.size());
+
+                    }
+                    dout.write(("OK\n").getBytes());
+                    dout.flush();
+                    str1 = in.readLine();
+                    System.out.println("message5= " + str1);
+                    if (server_index < largest_server_id.size()) {
                         dout.write(("SCHD " + jobinfo[2] + " " + largest_server_type + " "
                                 + largest_server_id.get(server_index) + "\n").getBytes());
-                        String str6 = in.readLine();
+                        str1 = in.readLine();
                         dout.flush();
-                        System.out.println("message= " + str6);
+                        System.out.println("message6= " + str1);
                         server_index++;
                     }
+
                 }
+                //dout.write(("REDY\n").getBytes());
+                //str1 = in.readLine();
+                //System.out.println("message7= " + str1);
+                //check = str1.substring(0, 4);
+
             }
             dout.write(("QUIT\n").getBytes());
             dout.flush();
-            String str7 = in.readLine();
-            System.out.println("message= " + str7);
+            str1 = in.readLine();
+            System.out.println("message8= " + str1);
             dout.close();
             s.close();
 
